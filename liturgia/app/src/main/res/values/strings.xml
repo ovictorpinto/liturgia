@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">Liturgia</string>
+
+    <string name="title_activity_fullscreen">FullscreenActivity</string>
+    <string name="dummy_button">Dummy Button</string>
+    <string name="dummy_content">DUMMY\nCONTENT</string>
+    <string name="explicacao_premium">Sendo um membro premium você tem acesso a liturgia de todos os dias e ainda fica sabendo qual é o
+        Santo do Dia.
+    </string>
+    <string name="titulo_premium">Torne-se premium</string>
+    <string name="quero_ser_premium">Quero ser premium!!!</string>
+    <string name="santo_do_dia">Santo do dia</string>
+</resources>

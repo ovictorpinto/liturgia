@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="5dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="@dimen/padding_default">
+
+        <TextView
+            android:id="@+id/textview_titulo"
+            style="@style/Base.TextAppearance.AppCompat.Subhead"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:text="Primeira Leitura  (2Sm 1,1-4.11-12.19.23-27)"/>
+
+        <TextView
+            android:id="@+id/textview_texto"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/padding_default_small"
+            android:ellipsize="end"
+            android:maxLines="4"
+            tools:text="{background-color:#ffffff; color:#333333;font-family:-apple-system, sans-serif; margin:0 .75em 1em;padding-top:.75em; line-height: 1.5em; text-ali gn: left{ background-color:#ffffff; colo r:#333333;font-family:-apple-system, sans-serif; margin:0 .75em 1em;padding-top:.75em; line-height: 1.5em; text-align: left"/>
+
+    </LinearLayout>
+</android.support.v7.widget.CardView>
