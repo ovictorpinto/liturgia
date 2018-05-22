@@ -1,5 +1,6 @@
 package br.com.r29tecnologia.liturgia.ui
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.support.v4.app.Fragment
@@ -29,6 +30,7 @@ class DiaFragment : Fragment() {
     lateinit var santoEm: Call<RetornoPadrao<Santo>>
     private var leituras: List<Leitura>? = null
     private var santo: Santo? = null
+    private var purchiseListener: MainActivity? = null
 
     companion object {
 
@@ -44,7 +46,7 @@ class DiaFragment : Fragment() {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        var rootView = inflater!!.inflate(R.layout.ly_dia, container, false)
+        var rootView = inflater.inflate(R.layout.ly_dia, container, false)
 
         var dia = arguments!![PARAM_DIA]
         var diaFormatado = SimpleDateFormat("yyyy-MM-dd").format(dia)
@@ -96,8 +98,15 @@ class DiaFragment : Fragment() {
         santoEm.cancel()
     }
 
+    override fun onAttach(context: Context?) {
+        super.onAttach(context)
+        if (context is MainActivity) {
+            purchiseListener = context
+        }
+    }
+
     private fun fillFields() {
-        if(leituras != null && santo != null) {
+        if (leituras != null && santo != null) {
             progress.visibility = View.GONE
             recycler.layoutManager = LinearLayoutManager(context)
             recycler.adapter = LeituraAdapter(leituras!!, santo!!, context!!,
@@ -110,6 +119,9 @@ class DiaFragment : Fragment() {
                         var intent = Intent(context, DetalheSantoActivity::class.java)
                         intent.putExtra(Santo.PARAM, it)
                         startActivity(intent)
+                    },
+                    {
+                        purchiseListener?.onSelectPremiumPurchase()
                     })
         }
     }

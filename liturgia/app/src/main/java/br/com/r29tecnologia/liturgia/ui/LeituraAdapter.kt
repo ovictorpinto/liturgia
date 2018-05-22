@@ -1,7 +1,6 @@
 package br.com.r29tecnologia.liturgia.ui
 
 import android.content.Context
-import android.support.v7.app.AlertDialog
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.RecyclerView.Adapter
 import android.text.Html
@@ -25,26 +24,23 @@ class LeituraAdapter(private val list: List<Leitura>,
                      private val santo: Santo,
                      private val context: Context,
                      private val openLeitura: (Leitura) -> Unit,
-                     private val openSanto: (Santo) -> Unit) : Adapter<LeituraAdapter.ViewHolder>() {
+                     private val openSanto: (Santo) -> Unit,
+                     private val openPremium: () -> Unit) : Adapter<LeituraAdapter.ViewHolder>() {
 
-    override fun onBindViewHolder(holder: ViewHolder?, position: Int) {
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         if (position > 0) {
             val item = list[position - 1]
-            holder?.let {
-                it.bindLeitura(item)
-            }
+            holder.bindLeitura(item)
         } else {
-            holder?.let {
-                if (LiturgiaApplication.PREMIUM)
-                    it.bindSanto()
-                else
-                    it.bindConvite()
-            }
+            if (LiturgiaApplication.PREMIUM)
+                holder.bindSanto()
+            else
+                holder.bindConvite()
         }
 
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): ViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val layout =
                 if (viewType == 0)
                     if (LiturgiaApplication.PREMIUM)
@@ -68,13 +64,7 @@ class LeituraAdapter(private val list: List<Leitura>,
 
         fun bindConvite() {
             itemView.button_convite.setOnClickListener {
-                val builder = AlertDialog.Builder(context)
-                with(builder) {
-                    setMessage("Ainda não disponível =/")
-                    setPositiveButton("ok", null)
-                    create()
-                    show()
-                }
+                openPremium.invoke()
             }
         }
 

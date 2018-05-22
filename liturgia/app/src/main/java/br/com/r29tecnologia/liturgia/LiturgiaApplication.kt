@@ -10,10 +10,14 @@ import io.fabric.sdk.android.Fabric;
  */
 class LiturgiaApplication : Application() {
     companion object {
-        val PREMIUM = false
+        var PREMIUM = false
+        val ID_PREMIUM = "premium"
     }
+
     override fun onCreate() {
         super.onCreate()
-        Fabric.with(this, Crashlytics())
+        if (!BuildConfig.DEBUG) {
+            Fabric.with(this, Crashlytics())
+        }
     }
 }
