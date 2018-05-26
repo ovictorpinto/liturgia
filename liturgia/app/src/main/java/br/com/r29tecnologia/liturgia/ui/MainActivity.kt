@@ -1,7 +1,13 @@
 package br.com.r29tecnologia.liturgia.ui
 
+import android.content.Intent
 import android.os.Bundle
+import android.support.v4.content.LocalBroadcastManager
 import android.support.v7.app.AppCompatActivity
+import android.view.Menu
+import android.view.MenuItem
+import android.widget.Toast
+import br.com.r29tecnologia.liturgia.BuildConfig
 import br.com.r29tecnologia.liturgia.LiturgiaApplication
 import br.com.r29tecnologia.liturgia.R
 import com.android.billingclient.api.*
@@ -39,7 +45,7 @@ class MainActivity : AppCompatActivity(), PurchasesUpdatedListener {
         val mSectionsPagerAdapter = DiaAdapter(supportFragmentManager)
 
         viewpager.adapter = mSectionsPagerAdapter
-        viewpager.currentItem = DiaAdapter.INITIAL_POSITION
+        viewpager.currentItem = mSectionsPagerAdapter.getInitialPosition()
         tablayout.setupWithViewPager(viewpager)
     }
 
@@ -48,6 +54,8 @@ class MainActivity : AppCompatActivity(), PurchasesUpdatedListener {
             if (purchases.filter { LiturgiaApplication.ID_PREMIUM.equals(it.sku, true) }.isNotEmpty()) {
                 LiturgiaApplication.PREMIUM = true
                 viewpager.adapter?.notifyDataSetChanged()
+                invalidateOptionsMenu()
+                LocalBroadcastManager.getInstance(MainActivity@ this).sendBroadcast(Intent(LiturgiaApplication.ACTION_PURCHASE))
             }
         }
     }
@@ -63,9 +71,39 @@ class MainActivity : AppCompatActivity(), PurchasesUpdatedListener {
     private fun verifyPremium() {
 
         var queryPurchases = billingClient.queryPurchases(BillingClient.SkuType.INAPP)
-        if (queryPurchases.purchasesList.filter { LiturgiaApplication.ID_PREMIUM.equals(it.sku, true) }.isNotEmpty()) {
+        val filter = queryPurchases.purchasesList.filter { LiturgiaApplication.ID_PREMIUM.equals(it.sku, true) }
+        if (filter.isNotEmpty()) {
             LiturgiaApplication.PREMIUM = true
+            LiturgiaApplication.PURCHASE_TOKEN = filter[0].purchaseToken
+        }else{
+            InvitePremiumHelper(this).show()
         }
         resume()
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        val inflater = menuInflater
+        if (BuildConfig.DEBUG && LiturgiaApplication.PREMIUM)
+            inflater.inflate(R.menu.menu_remove_premium, menu)
+        return super.onCreateOptionsMenu(menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        if (item?.itemId == R.id.action_remove_premium) {
+            billingClient.consumeAsync(LiturgiaApplication.PURCHASE_TOKEN, { responseCode, purchaseToken ->
+                if (responseCode == BillingClient.BillingResponse.OK) {
+                    Toast.makeText(this, "Removeu", Toast.LENGTH_SHORT).show()
+                    LiturgiaApplication.PREMIUM = false
+                    LiturgiaApplication.PURCHASE_TOKEN = null
+                    viewpager.adapter?.notifyDataSetChanged()
+                    invalidateOptionsMenu()
+                    LocalBroadcastManager.getInstance(MainActivity@ this).sendBroadcast(Intent(LiturgiaApplication.ACTION_PURCHASE))
+                } else {
+                    Toast.makeText(this, "Não removeu ${responseCode}", Toast.LENGTH_SHORT).show()
+                }
+            })
+            return true
+        } else
+            return super.onOptionsItemSelected(item)
     }
 }
