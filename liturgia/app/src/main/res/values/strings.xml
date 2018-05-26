@@ -10,4 +10,7 @@
     <string name="titulo_premium">Torne-se premium</string>
     <string name="quero_ser_premium">Quero ser premium!!!</string>
     <string name="santo_do_dia">Santo do dia</string>
+    <string name="text_popup_invite">Agora você pode se tornar Premium. Só assim poderá ver o santo do dia e acessar a liturgia de
+        qualquer dia!
+    </string>
 </resources>
