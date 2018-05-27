@@ -1,12 +1,17 @@
 package br.com.r29tecnologia.liturgia.ui
 
+import android.content.BroadcastReceiver
+import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.support.v4.content.LocalBroadcastManager
 import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import br.com.r29tecnologia.liturgia.LiturgiaApplication
 import br.com.r29tecnologia.liturgia.R
 import br.com.r29tecnologia.liturgia.model.Leitura
 import br.com.r29tecnologia.liturgia.model.RetornoPadrao
@@ -29,6 +34,8 @@ class DiaFragment : Fragment() {
     lateinit var santoEm: Call<RetornoPadrao<Santo>>
     private var leituras: List<Leitura>? = null
     private var santo: Santo? = null
+    private var purchiseListener: MainActivity? = null
+    private var premiumReceiver: BroadcastReceiver? = null
 
     companion object {
 
@@ -44,8 +51,21 @@ class DiaFragment : Fragment() {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        var rootView = inflater!!.inflate(R.layout.ly_dia, container, false)
+        var rootView = inflater.inflate(R.layout.ly_dia, container, false)
 
+        premiumReceiver = object : BroadcastReceiver() {
+            override fun onReceive(context: Context, intent: Intent) {
+                refresh()
+            }
+        }
+        LocalBroadcastManager.getInstance(activity!!).registerReceiver(premiumReceiver as BroadcastReceiver, IntentFilter
+        (LiturgiaApplication.ACTION_PURCHASE))
+        refresh()
+
+        return rootView
+    }
+
+    private fun refresh() {
         var dia = arguments!![PARAM_DIA]
         var diaFormatado = SimpleDateFormat("yyyy-MM-dd").format(dia)
         leiturasEm = LiturgiaService().getInstance().leiturasEm(diaFormatado)
@@ -86,18 +106,24 @@ class DiaFragment : Fragment() {
             }
 
         })
-
-        return rootView
     }
 
     override fun onDestroy() {
         super.onDestroy()
         leiturasEm.cancel()
         santoEm.cancel()
+        premiumReceiver?.let { LocalBroadcastManager.getInstance(activity!!).unregisterReceiver(it) }
+    }
+
+    override fun onAttach(context: Context?) {
+        super.onAttach(context)
+        if (context is MainActivity) {
+            purchiseListener = context
+        }
     }
 
     private fun fillFields() {
-        if(leituras != null && santo != null) {
+        if (leituras != null && santo != null) {
             progress.visibility = View.GONE
             recycler.layoutManager = LinearLayoutManager(context)
             recycler.adapter = LeituraAdapter(leituras!!, santo!!, context!!,
@@ -110,6 +136,9 @@ class DiaFragment : Fragment() {
                         var intent = Intent(context, DetalheSantoActivity::class.java)
                         intent.putExtra(Santo.PARAM, it)
                         startActivity(intent)
+                    },
+                    {
+                        purchiseListener?.onSelectPremiumPurchase()
                     })
         }
     }

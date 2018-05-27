@@ -3,6 +3,7 @@ package br.com.r29tecnologia.liturgia.ui
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentStatePagerAdapter
+import br.com.r29tecnologia.liturgia.LiturgiaApplication
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -12,8 +13,8 @@ import java.util.*
 class DiaAdapter(fm: FragmentManager) : FragmentStatePagerAdapter(fm) {
 
     companion object {
-        val INITIAL_POSITION = 1
-        val TOTAL = 3
+        val TOTAL_FREE = 3
+        val TOTAL_PREMIUM = 61
     }
 
     private val today = Date()
@@ -25,25 +26,31 @@ class DiaAdapter(fm: FragmentManager) : FragmentStatePagerAdapter(fm) {
     }
 
     override fun getCount(): Int {
-        return TOTAL
+        return if (LiturgiaApplication.PREMIUM) TOTAL_PREMIUM else TOTAL_FREE
     }
 
     override fun getPageTitle(position: Int): CharSequence? {
 
         val dtTrainning = getDateAt(position)
+
+        val initialPosition = getInitialPosition()
         when (position) {
-            INITIAL_POSITION -> return "Hoje " + diaMesFormatter.format(dtTrainning)
-            INITIAL_POSITION + 1 -> return "Amanhã " + diaMesFormatter.format(dtTrainning)
-            INITIAL_POSITION - 1 -> return "Ontem " + diaMesFormatter.format(dtTrainning)
+            initialPosition -> return "Hoje " + diaMesFormatter.format(dtTrainning)
+            initialPosition + 1 -> return "Amanhã " + diaMesFormatter.format(dtTrainning)
+            initialPosition - 1 -> return "Ontem " + diaMesFormatter.format(dtTrainning)
         }
 
         return SimpleDateFormat("EEE dd/MM").format(dtTrainning)
     }
 
+    fun getInitialPosition(): Int {
+        return count / 2
+    }
+
     private fun getDateAt(position: Int): Date {
         val calendar = Calendar.getInstance()
         calendar.time = today
-        calendar.add(Calendar.DATE, position - INITIAL_POSITION)
+        calendar.add(Calendar.DATE, position - getInitialPosition())
         calendar.set(Calendar.HOUR, 0)
         calendar.set(Calendar.MINUTE, 0)
         calendar.set(Calendar.SECOND, 0)
