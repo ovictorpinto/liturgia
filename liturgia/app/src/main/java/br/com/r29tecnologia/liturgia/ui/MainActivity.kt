@@ -10,6 +10,7 @@ import android.widget.Toast
 import br.com.r29tecnologia.liturgia.BuildConfig
 import br.com.r29tecnologia.liturgia.LiturgiaApplication
 import br.com.r29tecnologia.liturgia.R
+import br.com.r29tecnologia.liturgia.R.id.*
 import com.android.billingclient.api.*
 import kotlinx.android.synthetic.main.ly_main_activity.*
 
@@ -24,6 +25,9 @@ class MainActivity : AppCompatActivity(), PurchasesUpdatedListener {
         setSupportActionBar(toolbar)
 
         billingClient = BillingClient.newBuilder(this).setListener(this).build()
+        if (billingClient.isFeatureSupported(BillingClient.FeatureType.IN_APP_ITEMS_ON_VR) != BillingClient.BillingResponse.OK) {
+            resume()
+        }
         billingClient.startConnection(object : BillingClientStateListener {
             override fun onBillingSetupFinished(@BillingClient.BillingResponse billingResponseCode: Int) {
                 if (billingResponseCode == BillingClient.BillingResponse.OK) {
@@ -75,7 +79,7 @@ class MainActivity : AppCompatActivity(), PurchasesUpdatedListener {
         if (filter.isNotEmpty()) {
             LiturgiaApplication.PREMIUM = true
             LiturgiaApplication.PURCHASE_TOKEN = filter[0].purchaseToken
-        }else{
+        } else {
             InvitePremiumHelper(this).show()
         }
         resume()

@@ -24,6 +24,7 @@ class InvitePremiumHelper(private val context: Context) {
 
         if (semana != ultimoDia) {
             android.support.v7.app.AlertDialog.Builder(context).run {
+                setTitle(R.string.titulo_premium)
                 setView(R.layout.ly_premium_dialog)
                 setPositiveButton("ok", null)
                 create()
