@@ -1,7 +1,7 @@
 package br.com.r29tecnologia.liturgia.ui
 
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatActivity
 import android.view.WindowManager
 import br.com.r29tecnologia.liturgia.R
 import br.com.r29tecnologia.liturgia.model.Santo

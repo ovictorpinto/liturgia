@@ -23,7 +23,7 @@ class InvitePremiumHelper(private val context: Context) {
         val ultimoDia = sharedPref.getInt(PREF_ULT_ABERTURA, 0)
 
         if (semana != ultimoDia) {
-            android.support.v7.app.AlertDialog.Builder(context).run {
+            androidx.appcompat.app.AlertDialog.Builder(context).run {
                 setTitle(R.string.titulo_premium)
                 setView(R.layout.ly_premium_dialog)
                 setPositiveButton("ok", null)

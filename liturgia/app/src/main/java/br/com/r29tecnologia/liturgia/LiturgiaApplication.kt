@@ -1,9 +1,7 @@
 package br.com.r29tecnologia.liturgia
 
 import android.app.Application
-import com.crashlytics.android.Crashlytics;
 import com.google.firebase.analytics.FirebaseAnalytics
-import io.fabric.sdk.android.Fabric;
 
 
 /**
@@ -20,7 +18,6 @@ class LiturgiaApplication : Application() {
     override fun onCreate() {
         super.onCreate()
         if (!BuildConfig.DEBUG) {
-            Fabric.with(this, Crashlytics())
             FirebaseAnalytics.getInstance(this).setAnalyticsCollectionEnabled(true)
         }
     }

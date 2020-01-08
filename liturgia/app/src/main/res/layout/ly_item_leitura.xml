@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v7.widget.CardView
+<androidx.cardview.widget.CardView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -31,4 +31,4 @@
             tools:text="{background-color:#ffffff; color:#333333;font-family:-apple-system, sans-serif; margin:0 .75em 1em;padding-top:.75em; line-height: 1.5em; text-ali gn: left{ background-color:#ffffff; colo r:#333333;font-family:-apple-system, sans-serif; margin:0 .75em 1em;padding-top:.75em; line-height: 1.5em; text-align: left"/>
 
     </LinearLayout>
-</android.support.v7.widget.CardView>
+</androidx.cardview.widget.CardView>
