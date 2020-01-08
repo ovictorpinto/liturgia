@@ -4,6 +4,7 @@ apply plugin: 'kotlin-android-extensions'
 apply plugin: 'com.google.gms.google-services'
 apply plugin: 'com.github.triplet.play'
 
+
 repositories {
     maven { url "https://maven.google.com" }
     jcenter()
@@ -20,24 +21,19 @@ android {
             keyPassword "${LITURGIA_KEY_PASS}"
         }
     }
-    playAccountConfigs {
-        defaultAccountConfig {
-            jsonFile = file('/Users/victor/OneDrive/Java/verdinho/Verdinho-playAccount.json')
-        }
-    }
     defaultConfig {
         applicationId "br.com.r29tecnologia.liturgia"
         minSdkVersion 16
         targetSdkVersion 29
-        versionCode 6
-        versionName "1.1.0"
+        versionCode 7
+        versionName "1.1.1"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
         buildConfigField("String", "LITURGIA_BASE_URL", "\"" + LITURGIA_BASE_URL + "\"")
         signingConfig signingConfigs.config
-        playAccountConfig = playAccountConfigs.defaultAccountConfig
         play {
             track = 'production'
+            serviceAccountCredentials = file('/Users/victor/OneDrive/Java/verdinho/Verdinho-playAccount.json')
         }
     }
     buildTypes {

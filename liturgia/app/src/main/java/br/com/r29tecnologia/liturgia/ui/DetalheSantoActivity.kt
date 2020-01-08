@@ -17,7 +17,7 @@ class DetalheSantoActivity : AppCompatActivity() {
         //mantém a tela ativa
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         var santo = intent.getSerializableExtra(Santo.PARAM) as Santo
-        webview.loadData(santo.texto, "text/html; charset=UTF-8", null)
+        webview.loadDataWithBaseURL(null, santo.texto, "text/html", "utf-8", null)
         this.setTitle(santo.titulo)
     }
 }
